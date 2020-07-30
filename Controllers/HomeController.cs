@@ -12,17 +12,13 @@ using Microsoft.EntityFrameworkCore;
 namespace application.Controllers {
     public class HomeController : Controller {
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-        private readonly ApplicationContext _db;
-
-        public HomeController(ApplicationContext db) {
-            _db = db;
-        }
 
         public async Task<IActionResult> Index() {
-            var member = from m in _db.Member select m;
-            var list = await member.ToListAsync();
+            await Task.Run(() => {});
+            // var member = from m in _db.Member select m;
+            // var list = await member.ToListAsync();
 
-            _logger.Info("list :: " + list.ToString());
+            // _logger.Info("list :: " + list.ToString());
 
             return View();
         }
