@@ -32,9 +32,9 @@ namespace application {
                 .AddCookie(option => {
                     option.Cookie.HttpOnly = false;
                     option.Cookie.Name = "_n_session_";
-                    option.LoginPath = "/Login";
-                    option.LogoutPath = "/Logout";
-                    option.AccessDeniedPath = "/AccessDenied";
+                    option.LoginPath = "/User/Login";
+                    option.LogoutPath = "/User/Logout";
+                    option.AccessDeniedPath = "/User/AccessDenied";
                 });
             services.AddAuthorization();
             services.AddDbContext<ApplicationContext>(options => {

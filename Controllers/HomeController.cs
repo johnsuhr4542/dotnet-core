@@ -8,18 +8,23 @@ using Microsoft.Extensions.Logging;
 using application.Models;
 using application.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace application.Controllers {
     public class HomeController : Controller {
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly ApplicationContext _db;
 
-        public async Task<IActionResult> Index() {
-            await Task.Run(() => {});
-            // var member = from m in _db.Member select m;
-            // var list = await member.ToListAsync();
+        public HomeController(ApplicationContext db) {
+            _db = db;
+        }
 
-            // _logger.Info("list :: " + list.ToString());
-
+        public IActionResult Index() {
+            var loginUser = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            if (loginUser != null)
+                _logger.Info($"login user :: {loginUser}");
+            else
+                _logger.Info("not logged-in");
             return View();
         }
     }
