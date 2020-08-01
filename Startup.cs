@@ -38,7 +38,7 @@ namespace application {
                 });
             services.AddAuthorization();
             services.AddDbContext<ApplicationContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("ApplicationContext"));
+                options.UseMySql(Configuration.GetConnectionString("ApplicationContext"));
             });
         }
 
