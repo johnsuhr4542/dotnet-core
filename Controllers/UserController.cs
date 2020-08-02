@@ -36,7 +36,8 @@ namespace application.Controllers {
       }
 
       var claims = new List<Claim> {
-        new Claim(ClaimTypes.Name, savedUser.Username)
+        new Claim(ClaimTypes.Name, savedUser.Username),
+        new Claim("Roles", "Admin")
       };
 
       var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

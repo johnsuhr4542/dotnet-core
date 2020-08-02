@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using application.Context;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using application.Security;
 
 namespace application {
     public class Startup {
@@ -36,10 +37,16 @@ namespace application {
                     option.LogoutPath = "/User/Logout";
                     option.AccessDeniedPath = "/User/AccessDenied";
                 });
-            services.AddAuthorization();
+            services.AddAuthorization(option => {
+                option.AddPolicy(
+                    name: "MyPolicy",
+                    policy => policy.RequireClaim("Admin")
+                );
+            });
             services.AddDbContext<ApplicationContext>(options => {
                 options.UseMySql(Configuration.GetConnectionString("ApplicationContext"));
             });
+            services.AddSingleton<IAuthorizationService, SecurityHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
