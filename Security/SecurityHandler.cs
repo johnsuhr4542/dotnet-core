@@ -9,7 +9,7 @@ using NLog;
 namespace application.Security {
   public class SecurityHandler : IAuthorizationService
   {
-    private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
       var roles = user.FindFirstValue("Roles");

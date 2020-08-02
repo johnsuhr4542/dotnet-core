@@ -7,8 +7,24 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
     <form action="/User/Login" method="POST">
+        @Html.AntiForgeryToken()
         <input type="text" name="username" />
         <input type="password" name="password" />
         <input type="submit" value="login"/>
     </form>
+
+    <div>
+        <select>
+            <optgroup label="Country" >
+                <option value="korea">한국</option>
+                <option value="usa">미국</option>
+                <option value="japan">일본</option>
+            </optgroup>
+            <optgroup label="Color">
+                <option value="blue">파랑</option>
+                <option value="red">빨강</option>
+                <option value="green">초록</option>
+            </optgroup>
+        </select>
+    </div>
 </div>

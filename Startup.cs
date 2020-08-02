@@ -44,7 +44,8 @@ namespace application {
                 );
             });
             services.AddDbContext<ApplicationContext>(options => {
-                options.UseMySql(Configuration.GetConnectionString("ApplicationContext"));
+                var connectionString = Configuration.GetConnectionString("ApplicationContext");
+                options.UseMySql(connectionString);
             });
             services.AddSingleton<IAuthorizationService, SecurityHandler>();
         }
@@ -64,7 +65,10 @@ namespace application {
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}"));
+            app.UseEndpoints(endpoints => endpoints.MapControllerRoute(
+                name: "default", 
+                pattern: "{controller=Home}/{action=Index}"
+            ));
         }
     }
 }

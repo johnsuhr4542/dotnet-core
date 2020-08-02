@@ -23,6 +23,7 @@ namespace application.Controllers {
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(string username, string password) {
       var savedUser = await (
         from u in _db.Member
