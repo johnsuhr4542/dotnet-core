@@ -9,6 +9,7 @@ using application.Models;
 using application.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace application.Controllers {
     public class HomeController : Controller {
@@ -26,6 +27,11 @@ namespace application.Controllers {
             else
                 _logger.Info("not logged-in");
             return View();
+        }
+
+        [Authorize(Policy = "MyPolicy")]
+        public IActionResult UserInfo() {
+            return new JsonResult(new Dictionary<string, string>{{ "message", "ok" }});
         }
     }
 }

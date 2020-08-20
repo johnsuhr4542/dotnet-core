@@ -23,26 +23,23 @@ namespace application.Controllers {
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string username, string password) {
-            var query = from u in _db.Member
-                where u.Username == username
-                select u;
-                
-            var savedUser = await query.FirstOrDefaultAsync();
-
-            var result = new Dictionary<string, object>();
-
-            if (savedUser == null) {
-                result["message"] = "Unauthorized";
-
-                return new JsonResult(result);
-            }
+            var savedUser = await (
+            from u in _db.Member
+            where u.Username == username
+            select u
+            ).FirstOrDefaultAsync();
 
             var claims = new List<Claim> {
                 new Claim(ClaimTypes.Name, savedUser.Username)
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, savedUser.Username),
+                new Claim("Roles", "Admin")
+            };
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,

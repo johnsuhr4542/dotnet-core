@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using application.Context;
 using Microsoft.EntityFrameworkCore;
 using NLog;
-using System.Text.Json;
+using application.Security;
 
 namespace application {
     public class Startup {
@@ -32,12 +32,18 @@ namespace application {
                     option.LogoutPath = "/User/Logout";
                     option.AccessDeniedPath = "/User/AccessDenied";
                 });
-
-            services.AddAuthorization();
-
-            services.AddDbContext<ApplicationContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("ApplicationContext"));
+                
+            services.AddAuthorization(option => {
+                option.AddPolicy(
+                    name: "MyPolicy",
+                    policy => policy.RequireClaim("Admin")
+                );
             });
+            services.AddDbContext<ApplicationContext>(options => {
+                var connectionString = Configuration.GetConnectionString("ApplicationContext");
+                options.UseMySql(connectionString);
+            });
+            services.AddSingleton<IAuthorizationService, SecurityHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
@@ -55,7 +61,10 @@ namespace application {
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}"));
+            app.UseEndpoints(endpoints => endpoints.MapControllerRoute(
+                name: "default", 
+                pattern: "{controller=Home}/{action=Index}"
+            ));
         }
     }
 }
